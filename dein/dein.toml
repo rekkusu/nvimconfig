@@ -1,0 +1,385 @@
+[[plugins]]
+repo = 'Shougo/dein.vim'
+
+[[plugins]]
+repo = 'Shougo/vimproc.vim'
+hook_post_update = '''
+  if dein#util#_is_windows()
+    let cmd = 'tools\\update-dll-mingw'
+  elseif dein#util#_is_cygwin()
+    let cmd = 'make -f make_cygwin.mak'
+  elseif executable('gmake')
+    let cmd = 'gmake'
+  else
+    let cmd = 'make'
+  endif
+  let g:dein#plugin.build = cmd
+'''
+
+[[plugins]]
+repo = 'Shougo/deoplete.nvim'
+hook_add = '''
+  "call deoplete#custom#option({})
+  "call deoplete#custom#source('_', 'matchers', ['matcher_head'])
+  call deoplete#custom#option({
+        \ 'auto_complete_delay': 0,
+        \ 'smart_case': v:true,
+        \ })
+  call deoplete#custom#var('around', {
+        \   'range_above': 10,
+        \   'range_below': 10,
+        \   'mark_above': '[^]',
+        \   'mark_below': '[v]',
+        \   'mark_changes': '[*]',
+        \})
+
+  call deoplete#enable()
+'''
+
+[[plugins]]
+repo = 'ncm2/float-preview.nvim'
+hook_add = '''
+function! DisableExtras()
+  call nvim_win_set_option(g:float_preview#win, 'number', v:false)
+  call nvim_win_set_option(g:float_preview#win, 'relativenumber', v:false)
+  call nvim_win_set_option(g:float_preview#win, 'cursorline', v:false)
+endfunction
+
+autocmd User FloatPreviewWinOpen call DisableExtras()
+'''
+
+#[[plugins]]
+#repo = 'tbodt/deoplete-tabnine'
+#build = 'bash install.sh'
+
+[[plugins]]
+repo = 'Shougo/vimshell'
+
+[[plugins]]
+repo = 'vim-scripts/wombat256.vim'
+
+[[plugins]]
+repo = 'itchyny/lightline.vim'
+hook_add = '''
+let g:lightline = {
+      \ 'active': {
+      \   'left': [
+      \     ['mode', 'paste'],
+      \     ['space', 'readonly', 'modified', 'filename', 'space']
+      \   ],
+      \   'right': [
+      \     ['syntastic', 'lineinfo'],
+      \     ['percent'],
+      \     ['fileformat', 'space', 'fileencoding', 'space', 'filetype', 'space']
+      \   ],
+      \ },
+      \ 'component': {},
+      \ 'component_function': {
+      \   'filetype': 'Lightline_filetype',
+      \   'fileformat': 'Lightline_fileformat',
+      \   'filename': 'Lightline_filename',
+      \   'modified': 'Lightline_modified',
+      \   'fileencoding': 'Lightline_fileencoding',
+      \   'readonly': 'Lightline_readonly',
+      \   'mode': 'Lightline_mode',
+      \   'space': 'Lightline_space',
+      \ },
+      \ 'separator': { 'left': '', 'right': '' },
+      \ 'subseparator': { 'left': '', 'right': '' },
+      \ 'component_type': {
+      \   'readonly': 'raw',
+      \   'filename': 'raw',
+      \   'space': 'raw',
+      \   'modified': 'raw',
+      \   'fileformat': 'raw',
+      \   'fileencoding': 'raw',
+      \   'filetype': 'raw',
+      \ },
+    \ }
+
+function! Lightline_space()
+  return ' '
+endfunction
+
+
+function! Lightline_modified()
+  let fname = expand('%:t')
+  if (fname =~ 'NERD_tree')
+    return ''
+  elseif &ft == 'help'
+    return ''
+  elseif &modified
+    return '[+]'
+  elseif &modifiable == 0
+    return '[-]'
+  else
+    return ''
+  endif
+endfunction
+
+function! Lightline_readonly()
+  if &ft != 'help' && &readonly
+    return '[RO]'
+  endif
+  return ''
+endfunction
+
+function! Lightline_filetype()
+  let fname = expand('%:t')
+  if (fname =~ 'NERD_tree')
+    return ''
+  else
+    return winwidth(0) > 50 ? (strlen(&filetype) ? &filetype : 'no ft') : ''
+  endif
+endfunction
+
+function! Lightline_fileencoding()
+  let fname = expand('%:t')
+  if (fname =~ 'NERD_tree')
+    return ''
+  else
+    return winwidth(0) > 50 ? (strlen(&fenc) ? &fenc : &enc) : ''
+  endif
+endfunction
+
+function! Lightline_fileformat()
+  return winwidth(0) > 50 ? &fileformat : ''
+endfunction
+
+function! Lightline_mode()
+  let fname = expand('%:t')
+  return &ft == 'tagbar' ? 'Tagbar' :
+        \ &ft =~ 'nerdtree' ? 'NERDTree' :
+        \ &ft == 'unite' ? 'Unite' :
+        \ &ft == 'vimshell' ? 'VimShell' :
+        \ winwidth(0) > 60 ? lightline#mode() : ''
+endfunction
+
+function! Lightline_filename()
+    let fname = expand('%:t')
+    if &ft == 'tagbar'
+      return ''
+    elseif &ft == 'unite'
+      return unite#get_status_string()
+    elseif &ft == 'vimshell'
+      return vimshell#get_status_string()
+    elseif &ft == 'nerdtree'
+      return ''
+    elseif fname == ''
+      return '[No Name]'
+    else
+      if fname == ''
+        fname == '[No Name]'
+      end
+      return fname
+    endif
+endfunction
+'''
+
+[[plugins]]
+repo = 'scrooloose/nerdtree'
+hook_add = '''
+  let g:NERDTreeDirArrowExpandable = '▸'
+  let g:NERDTreeDirArrowCollapsible = '▾'
+  let NERDTreeSortHiddenFirst = 1
+  let NERDTreeAutoDeleteBuffer = 1
+  let NERDTreeIgnore = ['\.class$', '\.pyc$']
+  augroup NERDSetting
+    autocmd!
+    "autocmd VimEnter * NERDTree | if argc() != 0 | wincmd p | endif
+    autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+  augroup END
+'''
+
+[[plugins]]
+repo = 'Shougo/denite.nvim'
+hook_add = '''
+
+nnoremap <silent> <Leader>b :Denite buffer<CR>
+nnoremap <silent> <Leader>a :Denite -auto-resize buffer file/rec<CR>
+
+augroup denite_filter
+  autocmd FileType denite call s:denite_settings()
+  autocmd FileType denite-filter call s:denite_filter_settings()
+
+  function! s:denite_settings() abort
+    nnoremap <silent><buffer><expr> <CR> denite#do_map('do_action', 'switch')
+    nnoremap <silent><buffer><expr> p denite#do_map('do_action', 'preview')
+    nnoremap <silent><buffer><expr> dd denite#do_map('do_action', 'delete')
+    nnoremap <silent><buffer><expr> q denite#do_map('quit')
+    nnoremap <silent><buffer><expr> i denite#do_map('open_filter_buffer')
+    nnoremap <silent><buffer><expr> I denite#do_map('do_action', 'splitswitch')
+    nnoremap <silent><buffer><expr> s denite#do_map('do_action', 'vsplitswitch')
+  endfunction
+
+  function! s:denite_filter_settings() abort
+	  call deoplete#custom#buffer_option('auto_complete', v:false)
+  endfunction
+augroup END
+
+
+call denite#custom#option('_', {
+    \ 'split': 'floating',
+    \ 'prompt': '>',
+    \ 'start-filter': v:true
+    \ })
+
+call denite#custom#var('menu', 'menus', {
+      \})
+
+'''
+
+[[plugins]]
+repo = 'Shougo/context_filetype.vim'
+
+[[plugins]]
+repo = 'osyo-manga/vim-precious'
+
+[[plugins]]
+repo = 'cespare/vim-toml'
+
+#[[plugins]]
+#repo = 'neomake/neomake'
+#hook_add = '''
+#augroup NeoMake
+#  autocmd!
+#  "autocmd BufWritePost,BufEnter * Neomake
+#augroup END
+#'''
+
+[[plugins]]
+repo = 'kassio/neoterm'
+hook_add = '''
+nnoremap <silent> vs <Plug>(neoterm-repl-send-line)
+nnoremap <silent> vf <Plug>(neoterm-repl-send)
+'''
+
+[[plugins]]
+repo = 'rhysd/vim-wasm'
+
+[[plugins]]
+repo = 'dense-analysis/ale'
+hook_add = '''
+let g:ale_linters = {
+\   'go': ['gometalinter'],
+\   'latex': ['redpen'],
+\   'markdown': [],
+\}
+
+let g:ale_go_gometalinter_options = '--vendored-linters --disable-all --enable=gotype --enable=vet --enable=golint -t'
+let g:ale_go_redpen_options = ''
+let g:ale_set_loclist = 0
+let g:ale_set_quickfix = 1
+'''
+
+[[plugins]]
+repo = 'leafgarland/typescript-vim'
+
+[[plugins]]
+repo = 'autozimu/LanguageClient-neovim'
+rev = 'next'
+depends = ['deoplete.nvim']
+build = 'bash install.sh'
+hook_add = '''
+let g:LanguageClient_serverCommands = {}
+let g:LanguageClient_rootMarkers = {}
+
+"if executable('javascript-typescript-stdio')
+"  let g:LanguageClient_serverCommands.js = ['javascript-typescript-stdio']
+"  let g:LanguageClient_serverCommands.ts = ['javascript-typescript-stdio']
+"  let g:LanguageClient_rootMarkers.js = ['jsconfig.json']
+"  let g:LanguageClient_rootMarkers.ts = ['tsconfig.json']
+"endif
+
+if executable('gopls')
+  let g:LanguageClient_serverCommands.go = ['gopls']
+  let g:LanguageClient_rootMarkers.go = ['go.mod']
+  augroup LanguageClient_go
+    autocmd!
+    autocmd BufWritePre *.go :call LanguageClient#textDocument_formatting_sync()
+  augroup END
+endif
+
+if executable('cquery')
+  let g:LanguageClient_serverCommands.cpp = [
+        \ 'cquery',
+        \ '--log-file=/tmp/cq.log',
+        \ '--init={"cacheDirectory":"/var/cquery/"}'
+        \ ]
+endif
+
+if executable('pyls')
+  let g:LanguageClient_serverCommands.python = ['pyls', '--log-file', '/tmp/pyls.log']
+endif
+
+augroup LanguageClient_config
+  autocmd!
+  autocmd User LanguageClientStarted setlocal signcolumn=yes
+  autocmd User LanguageClientStopped setlocal signcolumn=auto
+augroup END
+
+call deoplete#custom#source('LanguageClient', 'min_pattern_length', 2)
+'''
+
+
+[[plugins]]
+repo = 'Shougo/defx.nvim'
+hook_add = '''
+augroup Defx
+  autocmd!
+  autocmd VimEnter * call s:open_defx_if_noargs()
+  autocmd FileType defx call s:defx_settings()
+augroup END
+
+nnoremap <silent> <Leader>f  :Defx<CR>
+
+call defx#custom#option('_', {
+      \ 'root_marker': ':',
+      \ 'columns': 'mark:indent:icon:filename:git',
+      \ 'show_ignored_files': 1,
+      \ 'split': 'floating',
+      \ 'resume': v:true,
+      \ 'wincol': 0,
+      \ 'winrow': 0,
+      \ 'winwidth': 60,
+      \ 'direction': 'topleft'
+      \ })
+
+call defx#custom#column('filename', {
+      \ 'min_width': 30,
+      \ 'max_width': 30,
+      \ 'root_marker_highlight': 'Ignore',
+      \ })
+
+function! s:open_defx_if_noargs()
+  if argc() == 0
+    Defx
+  endif
+endfunction
+
+function! s:defx_settings() abort
+  nnoremap <silent><buffer><expr> <CR> defx#is_directory() ? defx#do_action('open_or_close_tree') : defx#do_action('multi', ['drop', 'quit'])
+  nnoremap <silent><buffer><expr> u defx#do_action('cd', ['..'])
+  nnoremap <silent><buffer><expr> n defx#do_action('new_file')
+  nnoremap <silent><buffer><expr> dd defx#do_action('remove')
+  nnoremap <silent><buffer><expr> yy defx#do_action('copy')
+  nnoremap <silent><buffer><expr> p defx#do_action('paste')
+  nnoremap <silent><buffer><expr> r defx#do_action('rename')
+  nnoremap <silent><buffer><expr> m defx#do_action('move')
+  nnoremap <silent><buffer><expr> cd defx#do_action('change_vim_cwd')
+  nnoremap <silent><buffer><expr> i defx#do_action('multi', [['open', 'split'], 'quit'])
+  nnoremap <silent><buffer><expr> s defx#do_action('multi', [['open', 'vsplit'], 'quit'])
+  nnoremap <silent><buffer><expr> I defx#do_action('toggle_ignored_files')
+  nnoremap <silent><buffer><expr> n defx#do_action('new_file')
+  nnoremap <silent><buffer><expr> q defx#do_action('quit')
+endfunction
+'''
+
+[[plugins]]
+repo ='kristijanhusak/defx-git'
+
+[[plugins]]
+repo = 'lilydjwg/colorizer'
+
+[[plugins]]
+repo = 'tomlion/vim-solidity'

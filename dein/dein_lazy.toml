@@ -1,0 +1,90 @@
+#[[plugins]]
+#repo = 'fatih/vim-go'
+#on_ft = 'go'
+#hook_add = '''
+#let g:go_fmt_command = 'goimports'
+#let g:go_metalinter_autosave_enabled = []
+#let g:go_def_mapping_enabled = 0
+#let g:go_doc_keywordprg_enabled = 0
+#'''
+
+[[plugins]]
+repo = 'Shougo/neco-vim'
+on_ft = 'vim'
+
+[[plugins]]
+repo = 'zchee/deoplete-clang'
+on_ft = ['c', 'cpp', 'cxx']
+hook_add = '''
+if has('mac')
+  let g:deoplete#sources#clang#libclang_path = '/Library/Developer/CommandLineTools/usr/lib/libclang.dylib'
+  let g:deoplete#sources#clang#clang_header='/Library/Developer/CommandLineTools/usr/lib/clang'
+elseif has('unix')
+endif
+'''
+
+[[plugins]]
+repo = 'Shougo/neoinclude.vim'
+on_ft = ['c', 'cpp']
+depends = ['deoplete.nvim']
+
+[[plugins]]
+repo = 'ternjs/tern_for_vim'
+on_ft = ['javascript', 'jsx']
+hook_add = '''
+let g:tern_request_timeout = 1
+let g:tern#command = ['tern']
+let g:tern#arguments = ['--persistent']
+'''
+
+
+[[plugins]]
+repo = 'carlitux/deoplete-ternjs'
+on_ft = ['javascript', 'jsx']
+
+[[plugins]]
+repo = 'pangloss/vim-javascript'
+on_ft = ['javascript', 'jsx']
+
+[[plugins]]
+repo = 'Quramy/tsuquyomi'
+on_ft = ['typescript']
+hook_post_update = '''
+  if has('win32')
+    let cmd = 'tools\\update-dll-mingw'
+  elseif has('win32unix') " for Cygwin
+    let cmd = 'make -f make_cygwin.mak'
+  elseif has('mac')
+    let cmd = 'make -f make_mac.mak'
+  else
+    let cmd = 'make'
+  endif
+  let g:dein#plugin.build = cmd
+'''
+
+[[plugins]]
+repo = 'rudism/deoplete-tsuquyomi'
+on_ft = ['typescript']
+
+[[plugins]]
+repo = 'lervag/vimtex'
+on_ft = ['tex']
+hook_add = '''
+let g:vimtex_compiler_progname = 'nvr'
+let g:vimtex_compiler_latexmk = { 'continuous' : 0 }
+let g:vimtex_quickfix_open_on_warning = 0
+'''
+hook_source = '''
+call deoplete#custom#var('omni', 'input_patterns', {
+      \ 'tex': g:vimtex#re#deoplete,
+      \ 'plaintex': g:vimtex#re#deoplete
+      \})
+'''
+
+[[plugins]]
+repo = 'mattn/vim-goimports'
+on_ft = ['go']
+
+[[plugins]]
+repo = 'hashivim/vim-terraform'
+on_ft = ['terraform']
