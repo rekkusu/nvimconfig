@@ -47,26 +47,6 @@ repo = 'pangloss/vim-javascript'
 on_ft = ['javascript', 'jsx']
 
 [[plugins]]
-repo = 'Quramy/tsuquyomi'
-on_ft = ['typescript']
-hook_post_update = '''
-  if has('win32')
-    let cmd = 'tools\\update-dll-mingw'
-  elseif has('win32unix') " for Cygwin
-    let cmd = 'make -f make_cygwin.mak'
-  elseif has('mac')
-    let cmd = 'make -f make_mac.mak'
-  else
-    let cmd = 'make'
-  endif
-  let g:dein#plugin.build = cmd
-'''
-
-[[plugins]]
-repo = 'rudism/deoplete-tsuquyomi'
-on_ft = ['typescript']
-
-[[plugins]]
 repo = 'lervag/vimtex'
 on_ft = ['tex']
 hook_add = '''

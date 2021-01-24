@@ -22,6 +22,8 @@ if !isdirectory($CACHE)
   endif
 endif
 
+let g:python3_host_prog = expand('/usr/bin/python3')
+
 if !isdirectory(expand(s:dein_dir))
   call mkdir(expand(s:dein_dir), 'p')
 endif

@@ -59,6 +59,9 @@ repo = 'Shougo/vimshell'
 repo = 'vim-scripts/wombat256.vim'
 
 [[plugins]]
+repo = 'nanotech/jellybeans.vim'
+
+[[plugins]]
 repo = 'itchyny/lightline.vim'
 hook_add = '''
 let g:lightline = {
@@ -238,15 +241,6 @@ repo = 'osyo-manga/vim-precious'
 [[plugins]]
 repo = 'cespare/vim-toml'
 
-#[[plugins]]
-#repo = 'neomake/neomake'
-#hook_add = '''
-#augroup NeoMake
-#  autocmd!
-#  "autocmd BufWritePost,BufEnter * Neomake
-#augroup END
-#'''
-
 [[plugins]]
 repo = 'kassio/neoterm'
 hook_add = '''
@@ -267,7 +261,6 @@ let g:ale_linters = {
 \}
 
 let g:ale_go_gometalinter_options = '--vendored-linters --disable-all --enable=gotype --enable=vet --enable=golint -t'
-let g:ale_go_redpen_options = ''
 let g:ale_set_loclist = 0
 let g:ale_set_quickfix = 1
 '''
@@ -276,51 +269,18 @@ let g:ale_set_quickfix = 1
 repo = 'leafgarland/typescript-vim'
 
 [[plugins]]
-repo = 'autozimu/LanguageClient-neovim'
-rev = 'next'
-depends = ['deoplete.nvim']
-build = 'bash install.sh'
+repo = 'prabirshrestha/vim-lsp'
+
+[[plugins]]
+repo = 'lighttiger2505/deoplete-vim-lsp'
+
+[[plugins]]
+repo = 'mattn/vim-lsp-settings'
 hook_add = '''
-let g:LanguageClient_serverCommands = {}
-let g:LanguageClient_rootMarkers = {}
-
-"if executable('javascript-typescript-stdio')
-"  let g:LanguageClient_serverCommands.js = ['javascript-typescript-stdio']
-"  let g:LanguageClient_serverCommands.ts = ['javascript-typescript-stdio']
-"  let g:LanguageClient_rootMarkers.js = ['jsconfig.json']
-"  let g:LanguageClient_rootMarkers.ts = ['tsconfig.json']
-"endif
-
-if executable('gopls')
-  let g:LanguageClient_serverCommands.go = ['gopls']
-  let g:LanguageClient_rootMarkers.go = ['go.mod']
-  augroup LanguageClient_go
-    autocmd!
-    autocmd BufWritePre *.go :call LanguageClient#textDocument_formatting_sync()
-  augroup END
-endif
-
-if executable('cquery')
-  let g:LanguageClient_serverCommands.cpp = [
-        \ 'cquery',
-        \ '--log-file=/tmp/cq.log',
-        \ '--init={"cacheDirectory":"/var/cquery/"}'
-        \ ]
-endif
-
-if executable('pyls')
-  let g:LanguageClient_serverCommands.python = ['pyls', '--log-file', '/tmp/pyls.log']
-endif
-
-augroup LanguageClient_config
-  autocmd!
-  autocmd User LanguageClientStarted setlocal signcolumn=yes
-  autocmd User LanguageClientStopped setlocal signcolumn=auto
-augroup END
-
-call deoplete#custom#source('LanguageClient', 'min_pattern_length', 2)
+let g:lsp_settings = {
+\  'efm-langserver': {'disabled': v:false}
+\}
 '''
-
 
 [[plugins]]
 repo = 'Shougo/defx.nvim'
@@ -379,7 +339,10 @@ endfunction
 repo ='kristijanhusak/defx-git'
 
 [[plugins]]
-repo = 'lilydjwg/colorizer'
+repo = 'tomlion/vim-solidity'
 
 [[plugins]]
-repo = 'tomlion/vim-solidity'
+repo = 'peitalin/vim-jsx-typescript'
+
+[[plugins]]
+repo = 'udalov/kotlin-vim'

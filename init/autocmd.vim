@@ -8,11 +8,12 @@ augroup filereadcmd
   autocmd BufNewFile,BufRead *.ejs setlocal filetype=html
   autocmd BufNewFile,BufRead *.json setlocal filetype=json
   autocmd BufNewFile,BufRead *.twig setlocal filetype=htmldjango
-  autocmd BufWritePost *.ts silent make
+  autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescript.tsx
   autocmd BufRead,BufNewFile *.cas setlocal filetype=casl2
   autocmd BufNewFile,BufRead *.scala setf scala
   autocmd BufRead,BufNewFile *.sage setfiletype python
 
   autocmd BufNewFile,BufRead *.go setlocal filetype=go
+  autocmd BufNewFile,BufRead *.kt setlocal filetype=kotlin
 
 augroup END
