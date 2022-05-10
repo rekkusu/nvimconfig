@@ -2,41 +2,6 @@
 repo = 'Shougo/dein.vim'
 
 [[plugins]]
-repo = 'Shougo/vimproc.vim'
-hook_post_update = '''
-  if dein#util#_is_windows()
-    let cmd = 'tools\\update-dll-mingw'
-  elseif dein#util#_is_cygwin()
-    let cmd = 'make -f make_cygwin.mak'
-  elseif executable('gmake')
-    let cmd = 'gmake'
-  else
-    let cmd = 'make'
-  endif
-  let g:dein#plugin.build = cmd
-'''
-
-[[plugins]]
-repo = 'Shougo/deoplete.nvim'
-hook_add = '''
-  "call deoplete#custom#option({})
-  "call deoplete#custom#source('_', 'matchers', ['matcher_head'])
-  call deoplete#custom#option({
-        \ 'auto_complete_delay': 0,
-        \ 'smart_case': v:true,
-        \ })
-  call deoplete#custom#var('around', {
-        \   'range_above': 10,
-        \   'range_below': 10,
-        \   'mark_above': '[^]',
-        \   'mark_below': '[v]',
-        \   'mark_changes': '[*]',
-        \})
-
-  call deoplete#enable()
-'''
-
-[[plugins]]
 repo = 'ncm2/float-preview.nvim'
 hook_add = '''
 function! DisableExtras()
@@ -47,13 +12,6 @@ endfunction
 
 autocmd User FloatPreviewWinOpen call DisableExtras()
 '''
-
-#[[plugins]]
-#repo = 'tbodt/deoplete-tabnine'
-#build = 'bash install.sh'
-
-[[plugins]]
-repo = 'Shougo/vimshell'
 
 [[plugins]]
 repo = 'vim-scripts/wombat256.vim'
@@ -180,21 +138,6 @@ endfunction
 '''
 
 [[plugins]]
-repo = 'scrooloose/nerdtree'
-hook_add = '''
-  let g:NERDTreeDirArrowExpandable = '▸'
-  let g:NERDTreeDirArrowCollapsible = '▾'
-  let NERDTreeSortHiddenFirst = 1
-  let NERDTreeAutoDeleteBuffer = 1
-  let NERDTreeIgnore = ['\.class$', '\.pyc$']
-  augroup NERDSetting
-    autocmd!
-    "autocmd VimEnter * NERDTree | if argc() != 0 | wincmd p | endif
-    autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-  augroup END
-'''
-
-[[plugins]]
 repo = 'Shougo/denite.nvim'
 hook_add = '''
 
@@ -234,9 +177,28 @@ call denite#custom#var('menu', 'menus', {
 
 [[plugins]]
 repo = 'Shougo/context_filetype.vim'
+hook_add = '''
+if !exists('g:context_filetype#filetypes')
+  let g:context_filetype#filetypes = {}
+endif
+let g:context_filetype#filetypes.vue = {}
+'''
 
 [[plugins]]
 repo = 'osyo-manga/vim-precious'
+hook_add = '''
+let g:precious_enable_switchers = {
+  \ "*" : {
+  \   "setfiletype" : 0
+  \ },
+  \ "vim" : {
+  \   "setfiletype" : 1
+  \ },
+  \ "toml" : {
+  \   "setfiletype" : 1
+  \ },
+  \}
+'''
 
 [[plugins]]
 repo = 'cespare/vim-toml'
@@ -251,36 +213,24 @@ nnoremap <silent> vf <Plug>(neoterm-repl-send)
 [[plugins]]
 repo = 'rhysd/vim-wasm'
 
-[[plugins]]
-repo = 'dense-analysis/ale'
-hook_add = '''
-let g:ale_linters = {
-\   'go': ['gometalinter'],
-\   'latex': ['redpen'],
-\   'markdown': [],
-\}
-
-let g:ale_go_gometalinter_options = '--vendored-linters --disable-all --enable=gotype --enable=vet --enable=golint -t'
-let g:ale_set_loclist = 0
-let g:ale_set_quickfix = 1
-'''
-
-[[plugins]]
-repo = 'leafgarland/typescript-vim'
-
-[[plugins]]
-repo = 'prabirshrestha/vim-lsp'
-
-[[plugins]]
-repo = 'lighttiger2505/deoplete-vim-lsp'
-
-[[plugins]]
-repo = 'mattn/vim-lsp-settings'
-hook_add = '''
-let g:lsp_settings = {
-\  'efm-langserver': {'disabled': v:false}
-\}
-'''
+#[[plugins]]
+#repo = 'prabirshrestha/vim-lsp'
+#hook_add = '''
+#let g:lsp_diagnostics_highlights_enabled = 0
+#let g:lsp_diagnostics_echo_cursor = 0
+#let g:lsp_diagnostics_virtual_text_enabled = 0
+#'''
+#
+#[[plugins]]
+#repo = 'lighttiger2505/deoplete-vim-lsp'
+#
+#[[plugins]]
+#repo = 'mattn/vim-lsp-settings'
+#hook_add = '''
+#let g:lsp_settings = {
+#\  'efm-langserver': {'disabled': v:false}
+#\}
+#'''
 
 [[plugins]]
 repo = 'Shougo/defx.nvim'
@@ -325,6 +275,7 @@ function! s:defx_settings() abort
   nnoremap <silent><buffer><expr> yy defx#do_action('copy')
   nnoremap <silent><buffer><expr> p defx#do_action('paste')
   nnoremap <silent><buffer><expr> r defx#do_action('rename')
+  nnoremap <silent><buffer><expr> R defx#do_action('redraw')
   nnoremap <silent><buffer><expr> m defx#do_action('move')
   nnoremap <silent><buffer><expr> cd defx#do_action('change_vim_cwd')
   nnoremap <silent><buffer><expr> i defx#do_action('multi', [['open', 'split'], 'quit'])
@@ -346,3 +297,77 @@ repo = 'peitalin/vim-jsx-typescript'
 
 [[plugins]]
 repo = 'udalov/kotlin-vim'
+
+[[plugins]]
+repo = 'posva/vim-vue'
+
+[[plugins]]
+repo = 'nvim-treesitter/nvim-treesitter'
+hook_add = '''
+lua <<EOF
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = "maintained",
+  highlight = {
+    enable = true
+  }
+}
+EOF
+'''
+
+[[plugins]]
+repo = 'neovim/nvim-lspconfig'
+
+[[plugins]]
+repo = 'williamboman/nvim-lsp-installer'
+hook_add = '''
+lua <<EOF
+local lsp_installer = require("nvim-lsp-installer")
+
+lsp_installer.on_server_ready(function(server)
+    local opts = {}
+    opts.on_attach = on_attach
+    server:setup(opts)
+end)
+EOF
+
+nnoremap <silent> <Leader>r :lua vim.lsp.buf.rename()<CR>
+nnoremap <silent> <Leader>D :lua vim.lsp.buf.declaration()<CR>
+nnoremap <silent> <Leader>d :lua vim.lsp.buf.definition()<CR>
+'''
+
+[[plugins]]
+repo = 'hrsh7th/cmp-nvim-lsp'
+
+[[plugins]]
+repo = 'hrsh7th/cmp-vsnip'
+
+[[plugins]]
+repo = 'hrsh7th/vim-vsnip'
+
+[[plugins]]
+repo = 'hrsh7th/nvim-cmp'
+hook_add = '''
+lua <<EOF
+local cmp = require'cmp'
+
+cmp.setup({
+  snippet = {
+    expand = function(args)
+      vim.fn["vsnip#anonymous"](args.body)
+    end,
+  },
+  mapping = {
+    ['<Tab>'] = cmp.mapping(cmp.mapping.select_next_item()),
+    ['<S-Tab>'] = cmp.mapping(cmp.mapping.select_prev_item()),
+    ['<CR>'] = cmp.mapping.confirm({ select = true }),
+  },
+  sources = cmp.config.sources({
+    { name = 'nvim_lsp' }
+  }, {
+  })
+})
+
+EOF
+'''
+
+

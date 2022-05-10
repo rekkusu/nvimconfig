@@ -73,7 +73,7 @@ set splitbelow splitright
 set modeline
 set guifont=Monaco:h13
 set autoread
-set ambiwidth=double
+set ambiwidth=single
 set hidden
 set list
 set listchars=eol:$,tab:>-,trail:-
@@ -106,8 +106,23 @@ endif
 " tex default
 let g:tex_flavor = "latex"
 
+" clipboard
+"if stridx(system('uname -r'), 'microsoft')
+"  let g:clipboard = {
+"          \   'name': 'win32yank',
+"          \   'copy': {
+"          \      '+': '/mnt/c/Users/rex/Applications/win32yank/win32yank.exe -i',
+"          \    },
+"          \   'paste': {
+"          \      '+': '/mnt/c/Users/rex/Applications/win32yank/win32yank.exe -o',
+"          \   },
+"          \   'cache_enabled': 0,
+"          \ }
+"endif
+
 " }}}
 
 runtime init/keymap.vim
 runtime init/autocmd.vim
 runtime init/highlight.vim
+
